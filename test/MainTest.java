@@ -19,7 +19,7 @@ public class MainTest {
     }
 
     @Test
-    public void main(String[] args) throws Exception {
+    public void main() throws Exception {
         assertTrue(!false);
     }
 

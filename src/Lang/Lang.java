@@ -2,6 +2,10 @@ package Lang;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * Created by Anders Wiberg Olsen on 12-09-2016.
+ */
+
 public class Lang {
     private static String lang;
     private static String country;
