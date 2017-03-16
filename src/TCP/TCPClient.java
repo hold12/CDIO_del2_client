@@ -4,10 +4,10 @@ import java.net.*;
 import java.io.*;
 
 /**
- * Created by Anders Wiberg Olsen on 06-03-2017.
+ * Created by Anders Wiberg Olsen on 2017-06-03.
  */
 
-public class TCPClient {
+public class TCPClient implements ITCPClient{
     private Socket socket;
     private BufferedReader reader = null;
     private BufferedWriter writer = null;
@@ -15,8 +15,8 @@ public class TCPClient {
     public TCPClient() {
     }
 
+    @Override
     public synchronized void connect(String host, int port) throws IOException {
-        System.out.println("Connecting to " + host + " on port " + port);
         if (socket != null)
             throw new IOException("Already connected. Disconnect first.");
 
@@ -25,6 +25,7 @@ public class TCPClient {
         writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     }
 
+    @Override
     public void send(String line) throws IOException {
         if (socket == null)
             throw new IOException("Not connected");
@@ -37,11 +38,13 @@ public class TCPClient {
         }
     }
 
+    @Override
     public String receive() throws IOException {
         String line = reader.readLine();
         return line;
     }
 
+    @Override
     public void close() throws IOException {
         socket.close();
         socket = null;

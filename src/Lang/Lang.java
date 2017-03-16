@@ -3,7 +3,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * Created by Anders Wiberg Olsen on 12-09-2016.
+ * Created by Anders Wiberg Olsen on 2016-09-12.
  */
 
 public class Lang {
