@@ -35,7 +35,7 @@ public class WeightClientController implements WeightClient.IWeightClientControl
     @Override
     public String getCurrentWeight() throws IOException {
         // S S      0.900 kg
-        String receivedMessage = "";
+        String receivedMessage;
         try {
             tcp.send("S");
             receivedMessage = tcp.receive();
@@ -48,14 +48,20 @@ public class WeightClientController implements WeightClient.IWeightClientControl
 
     // T (Tare)
     @Override
-    public void tareWeight() throws IOException {
+    public String tareWeight() throws IOException {
+        String newTare;
         try {
             tcp.send("T");
-//            if (!tcp.receive().equals(""))
-//                throw new IOException("Something went wrong when taring the weight.");
+            newTare = tcp.receive();
+            if (!newTare.startsWith("T S"))
+                throw new IOException("Something went wrong when taring the weight.");
         } catch (IOException e) {
             throw new IOException("Failed to tare the weight: " + e.getMessage());
         }
+        newTare = newTare.replace("T S", "");
+        newTare = newTare.replace("\"", "");
+        newTare = newTare.trim();
+        return newTare;
     }
 
     // D (Write in the primary display of the weight)
@@ -102,10 +108,12 @@ public class WeightClientController implements WeightClient.IWeightClientControl
             throw new StringIndexOutOfBoundsException("The message to the secondary display must be within 30 characters long.");
         try {
             tcp.send("RM20 8 \"" + secondaryDisplay + "\" \"" + primaryDisplay + "\" \"" + keyPadState + "\"");
-            if (!tcp.receive().equals("RM20 B"))
+            String received = tcp.receive();
+            if (!received.equals("RM20 B"))
                 throw new IOException("Something went wrong when receiving RM20 B message from the weight.");
             userMessage = tcp.receive();
             userMessage = userMessage.replace("RM20 A ", "");
+            userMessage = userMessage.replace("\"", "");
         } catch (IOException e) {
             throw new IOException("Could not execute RM20 8: " + e.getMessage());
         }
