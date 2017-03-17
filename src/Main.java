@@ -44,13 +44,8 @@ public class Main {
                 System.out.println(Lang.msg("errCmdNotFound"));
             }
         }
-//        if (!authenticate()) System.exit(1);
-//        while(!authenticate()) {
-//            System.err.println(Lang.msg("errNotAuthenticated"));
-//        }
 
         menu();
-//        console();
     }
 
     private void menu() {

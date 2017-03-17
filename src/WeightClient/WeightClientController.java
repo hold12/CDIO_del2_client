@@ -34,7 +34,7 @@ public class WeightClientController implements WeightClient.IWeightClientControl
     @Override
     public String getCurrentWeight() throws IOException {
         // S S      0.900 kg
-        String receivedMessage = "";
+        String receivedMessage;
         try {
             tcp.send("S");
             receivedMessage = tcp.receive();
@@ -50,8 +50,7 @@ public class WeightClientController implements WeightClient.IWeightClientControl
     public void tareWeight() throws IOException {
         try {
             tcp.send("T");
-//            if (!tcp.receive().equals(""))
-//                throw new IOException("Something went wrong when taring the weight.");
+            // TODO: Should this not also return something?
         } catch (IOException e) {
             throw new IOException("Failed to tare the weight: " + e.getMessage());
         }
