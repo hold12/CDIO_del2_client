@@ -1,7 +1,5 @@
 package WeightClient;
 import Lang.Lang;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -9,7 +7,7 @@ import java.util.Scanner;
  * Created by AndersWOlsen on 16-03-2017.
  */
 public class WeightGUI implements IWeightGUI {
-    IWeightClientController weight;
+    private IWeightClientController weight;
     private boolean connected = false;
 
     public WeightGUI(IWeightClientController weight) {
@@ -77,6 +75,9 @@ public class WeightGUI implements IWeightGUI {
             System.err.println(Lang.msg("exceptionMessageDelivery"));
             return;
         }
+        finally{
+        	scn.close();
+        }
         System.out.println(Lang.msg("msgDelivered"));
     }
 
@@ -98,6 +99,9 @@ public class WeightGUI implements IWeightGUI {
         } catch (IOException e) {
             System.err.println(Lang.msg("exceptionMessageDelivery"));
             return;
+        }
+        finally{
+        	scn.close();
         }
         System.out.println(Lang.msg("msgDelivered"));
     }
@@ -162,6 +166,9 @@ public class WeightGUI implements IWeightGUI {
             System.err.println(Lang.msg("exceptionRM208"));
             return;
         }
+        finally{
+        	scn.close();
+        }
         System.out.println(Lang.msg("userEntered") + ": " + returnedMsg);
     }
 
@@ -181,6 +188,9 @@ public class WeightGUI implements IWeightGUI {
             weight.setNewGrossWeight(newWeight);
         } catch (IOException e) {
             System.err.println(Lang.msg("exceptionSetWeight"));
+        }
+        finally{
+        	scn.close();
         }
     }
 
