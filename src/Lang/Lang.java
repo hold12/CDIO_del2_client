@@ -9,7 +9,6 @@ import java.util.ResourceBundle;
 public class Lang {
     private static String lang;
     private static String country;
-    @SuppressWarnings("FieldCanBeLocal")
     private static Locale locale;
 
     private static ResourceBundle resourceBundle;

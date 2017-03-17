@@ -11,8 +11,10 @@ import java.io.IOException;
 
 public class WeightClientController implements WeightClient.IWeightClientController {
     private ITCPClient tcp;
-    private String host;
-    private int port = 8000; // Default port
+    @SuppressWarnings("unused")
+	private String host;
+    @SuppressWarnings("unused")
+	private int port = 8000; // Default port
 
     public WeightClientController() {
         this.tcp = new TCPClient();
