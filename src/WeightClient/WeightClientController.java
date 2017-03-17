@@ -11,10 +11,6 @@ import java.io.IOException;
 
 public class WeightClientController implements WeightClient.IWeightClientController {
     private ITCPClient tcp;
-    @SuppressWarnings("unused")
-	private String host;
-    @SuppressWarnings("unused")
-	private int port = 8000; // Default port
 
     public WeightClientController() {
         this.tcp = new TCPClient();
@@ -22,9 +18,6 @@ public class WeightClientController implements WeightClient.IWeightClientControl
 
     @Override
     public void connect(String host, int port) throws IOException {
-        this.host = host;
-        this.port = port;
-
         try {
             tcp.connect(host, port);
         } catch (IOException e) {

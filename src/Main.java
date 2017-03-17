@@ -11,12 +11,12 @@ import java.util.Scanner;
  * Created by awo on 16/03/17.
  */
 public class Main {
-    IWeightClientController weightClient;
-    IWeightGUI gui;
-    String input;
-    Scanner scn;
+    private IWeightClientController weightClient;
+    private IWeightGUI gui;
+    private String input;
+    private Scanner scn;
 
-    public Main() {
+    private Main() {
         weightClient = new WeightClientController();
         gui = new WeightGUI(weightClient);
         scn = new Scanner(System.in);
@@ -33,7 +33,7 @@ public class Main {
         main.startProgram();
     }
 
-    public void startProgram() {
+    private void startProgram() {
         while(true) {
             System.out.print("start> ");
             input = scn.nextLine().toLowerCase();
@@ -100,7 +100,7 @@ public class Main {
 
         // Place tara
         try {
-            userInput = weightClient.rm208("Tare", "Place tare and press enter", IWeightClientController.KeyPadState.UPPER_CHARS);
+            weightClient.rm208("Tare", "Place tare and press enter", IWeightClientController.KeyPadState.UPPER_CHARS);
         } catch (IOException e) { System.err.println(Lang.msg("exceptionRM208")); }
 
         System.out.println("Tare placed.");
@@ -108,14 +108,14 @@ public class Main {
         System.out.println("Weight successfully tared.");
 
         try {
-            userInput = weightClient.rm208("Tare", "Place powder and press enter", IWeightClientController.KeyPadState.UPPER_CHARS);
+            weightClient.rm208("Tare", "Place powder and press enter", IWeightClientController.KeyPadState.UPPER_CHARS);
         } catch (IOException e) { System.err.println(Lang.msg("exceptionRM208")); }
 
         gui.getCurrentWeight();
         gui.tareWeight();
 
         try {
-            userInput = weightClient.rm208("Tare", "Remove gross and press enter", IWeightClientController.KeyPadState.UPPER_CHARS);
+            weightClient.rm208("Tare", "Remove gross and press enter", IWeightClientController.KeyPadState.UPPER_CHARS);
         } catch (IOException e) { System.err.println(Lang.msg("exceptionRM208")); }
 
         gui.getCurrentWeight();

@@ -40,8 +40,7 @@ public class TCPClient implements ITCPClient{
 
     @Override
     public String receive() throws IOException {
-        String line = reader.readLine();
-        return line;
+        return reader.readLine();
     }
 
     @Override

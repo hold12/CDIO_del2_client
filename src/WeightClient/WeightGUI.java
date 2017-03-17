@@ -7,7 +7,7 @@ import java.util.Scanner;
  * Created by AndersWOlsen on 16-03-2017.
  */
 public class WeightGUI implements IWeightGUI {
-    IWeightClientController weight;
+    private IWeightClientController weight;
     private boolean connected = false;
 
     public WeightGUI(IWeightClientController weight) {

@@ -20,7 +20,7 @@ public class MainTest {
 
     @Test
     public void main() throws Exception {
-        assertTrue(!false);
+        assertTrue(true);
     }
 
 }
