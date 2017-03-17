@@ -20,7 +20,9 @@
     <target name="compile">
         <mkdir dir="${main.build.dir}"/>
         <javac srcdir="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false">
-            <classpath refid="classpath.base"/>
+            <classpath refid="classpath.base">
+                <pathelement path="lib/SimpleTCP.jar" />
+            </classpath>
         </javac>
     </target>
 
