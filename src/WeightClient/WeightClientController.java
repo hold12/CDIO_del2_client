@@ -4,9 +4,7 @@ package WeightClient;
  * Created by awo on 2017-03-16.
  */
 
-import TCP.TCPClient;
-import TCP.ITCPClient;
-
+import SimpleTCP.Client.*;
 import java.io.IOException;
 
 public class WeightClientController implements WeightClient.IWeightClientController {
