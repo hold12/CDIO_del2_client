@@ -58,7 +58,7 @@ public class Main {
             console();
         if (input.startsWith("close") || input.startsWith("exit") || input.startsWith("quit")) {
             gui.close();
-            System.exit(0);
+            return;
         }
 
         menu();

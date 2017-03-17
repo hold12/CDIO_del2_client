@@ -22,7 +22,7 @@ public interface IWeightClientController {
 
     void connect(String host, int port) throws IOException;
     String getCurrentWeight() throws IOException;
-    void tareWeight() throws IOException;
+    String tareWeight() throws IOException;
     void writeToPrimaryDisplay(String message) throws IOException;
     void writeToSecondaryDisplay(String message) throws IOException, StringIndexOutOfBoundsException;
     void clearPrimaryDisplay() throws IOException;

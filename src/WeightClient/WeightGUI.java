@@ -53,7 +53,7 @@ public class WeightGUI implements IWeightGUI {
         try {
             weight.tareWeight();
         } catch (IOException e) {
-            System.err.println(Lang.msg("exceptionTare") + " " + Lang.msg("exceptionKeyState"));
+            System.err.println(Lang.msg("exceptionTare") + " " + Lang.msg("exceptionKeyState") + e.getMessage());
         }
         System.out.println(Lang.msg("tared"));
     }
