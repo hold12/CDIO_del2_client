@@ -2,6 +2,10 @@ package Lang;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * Created by Anders Wiberg Olsen on 2016-09-12.
+ */
+
 public class Lang {
     private static String lang;
     private static String country;
@@ -14,8 +18,8 @@ public class Lang {
 
     public static void setLanguage(String[] args) {
         if (args.length != 2) {
-            lang = "da";
-            country = "DK";
+            lang = "en";
+            country = "UK";
         } else if (args.length == 2){
             lang = args[0];
             country = args[1];
