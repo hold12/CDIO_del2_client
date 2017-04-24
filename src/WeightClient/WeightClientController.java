@@ -50,9 +50,23 @@ public class WeightClientController implements WeightClient.IWeightClientControl
     public void tareWeight() throws IOException {
         try {
             tcp.send("T");
-            // TODO: Should this not also return something?
+            if (!tcp.receive().startsWith("T S")) {
+                throw new IOException(("Failed to tare the weidht. Did not receive T A."));
+            }
         } catch (IOException e) {
             throw new IOException("Failed to tare the weight: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void cancelCurrentOperation() throws IOException {
+        try {
+            tcp.send("@");
+            if (!tcp.receive().startsWith("I4 A")) {
+                throw new IOException("Did not receive expected message after resetting.");
+            }
+        } catch (IOException e) {
+            throw new IOException("Failed to cancel the current operation: " + e.getMessage());
         }
     }
 
@@ -99,11 +113,15 @@ public class WeightClientController implements WeightClient.IWeightClientControl
         if (secondaryDisplay.length() > 30)
             throw new StringIndexOutOfBoundsException("The message to the secondary display must be within 30 characters long.");
         try {
-            tcp.send("RM20 8 \"" + secondaryDisplay + "\" \"" + primaryDisplay + "\" \"" + keyPadState + "\"");
+            String tmp = "RM20 8 \"" + secondaryDisplay + "\" \"\" \"" + keyPadState + "\"";
+            System.out.println("Start :" + tmp + ": slut");
+            tcp.send(tmp);
             if (!tcp.receive().equals("RM20 B"))
                 throw new IOException("Something went wrong when receiving RM20 B message from the weight.");
             userMessage = tcp.receive();
-            userMessage = userMessage.replace("RM20 A ", "");
+            //userMessage = tcp.receive();
+            userMessage = userMessage.replace("RM20 A \"", "");
+            userMessage = userMessage.replace("\"", "");
         } catch (IOException e) {
             throw new IOException("Could not execute RM20 8: " + e.getMessage());
         }
