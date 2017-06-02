@@ -6,6 +6,7 @@ package WeightClient;
 
 import SimpleTCP.Client.*;
 import java.io.IOException;
+import java.nio.file.attribute.UserDefinedFileAttributeView;
 
 public class WeightClientController implements WeightClient.IWeightClientController {
     private ITCPClient tcp;
@@ -18,6 +19,8 @@ public class WeightClientController implements WeightClient.IWeightClientControl
     public void connect(String host, int port) throws IOException {
         try {
             tcp.connect(host, port);
+            String rec = tcp.receive(); // Receive initial "I4 A" after power-on
+            System.out.println(rec); //TODO: Remove debug (see above)
         } catch (IOException e) {
             throw new IOException("Failed to connect to " + host + " on port " + port + ": " + e.getMessage());
         }
@@ -45,8 +48,9 @@ public class WeightClientController implements WeightClient.IWeightClientControl
         try {
             tcp.send("T");
             newTare = tcp.receive();
-            if (!newTare.startsWith("T S"))
-                throw new IOException("Something went wrong when taring the weight.");
+            if (!newTare.startsWith("T S")) {
+                throw new IOException(("Failed to tare the weight. Did not receive T S."));
+            }
         } catch (IOException e) {
             throw new IOException("Failed to tare the weight: " + e.getMessage());
         }
@@ -54,6 +58,20 @@ public class WeightClientController implements WeightClient.IWeightClientControl
         newTare = newTare.replace("\"", "");
         newTare = newTare.trim();
         return newTare;
+    }
+
+    @Override
+    public void cancelCurrentOperation() throws IOException {
+        try {
+            tcp.send("@");
+            String tcpRecCan = tcp.receive(); // Receive initial "I4 A" after reset
+            System.out.println(tcpRecCan); //TODO: Remove debug
+            if (!tcpRecCan.startsWith("I4 A")) {
+                throw new IOException("Did not receive expected message after resetting.");
+            }
+        } catch (IOException e) {
+            throw new IOException("Failed to cancel the current operation: " + e.getMessage());
+        }
     }
 
     // D (Write in the primary display of the weight)
@@ -99,12 +117,16 @@ public class WeightClientController implements WeightClient.IWeightClientControl
         if (secondaryDisplay.length() > 30)
             throw new StringIndexOutOfBoundsException("The message to the secondary display must be within 30 characters long.");
         try {
-            tcp.send("RM20 8 \"" + secondaryDisplay + "\" \"" + primaryDisplay + "\" \"" + keyPadState + "\"");
-            String received = tcp.receive();
-            if (!received.equals("RM20 B"))
+            String tmp = "RM20 8 \"" + secondaryDisplay + "\" \"\" \"" + keyPadState + "\"";
+            System.out.println("Start :" + tmp + ": slut");
+            tcp.send(tmp);
+            String tcpRecRm = tcp.receive();
+            System.out.println(tcpRecRm);
+            if (!tcpRecRm.equals("RM20 B"))
                 throw new IOException("Something went wrong when receiving RM20 B message from the weight.");
             userMessage = tcp.receive();
-            userMessage = userMessage.replace("RM20 A ", "");
+            System.out.println(userMessage);
+            userMessage = userMessage.replace("RM20 A \"", "");
             userMessage = userMessage.replace("\"", "");
         } catch (IOException e) {
             throw new IOException("Could not execute RM20 8: " + e.getMessage());

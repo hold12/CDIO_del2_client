@@ -65,13 +65,19 @@ public class Main {
     }
 
     private void batch(String userId, String batchId) {
+        try {
+            weightClient.cancelCurrentOperation();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
         if(!authenticate(userId, batchId)) return;
         String userInput = "";
         System.out.println("User authenticated");
 
         // Verify Username
         try {
-            userInput = weightClient.rm208("VERIFY", "Username = Anders And (Y/N)", IWeightClientController.KeyPadState.UPPER_CHARS);
+            userInput = weightClient.rm208("VERIFY", "andersand", IWeightClientController.KeyPadState.UPPER_CHARS);
         } catch (IOException e) { System.err.println(Lang.msg("exceptionRM208")); }
 
         if (!userInput.equals("Y")) {
@@ -80,7 +86,7 @@ public class Main {
 
         // Verify Batch
         try {
-            userInput = weightClient.rm208("VERIFY", "Batch = Salt (Y/N)", IWeightClientController.KeyPadState.UPPER_CHARS);
+            userInput = weightClient.rm208("VERIFY", "salt", IWeightClientController.KeyPadState.UPPER_CHARS);
         } catch (IOException e) { System.err.println(Lang.msg("exceptionRM208")); }
 
         if (!userInput.equals("Y")) {
@@ -90,7 +96,7 @@ public class Main {
 
         // Unloaded
         try {
-            userInput = weightClient.rm208("VERIFY", "Weight must be unloaded (Y/N)", IWeightClientController.KeyPadState.UPPER_CHARS);
+            userInput = weightClient.rm208("VERIFY", "unloaded", IWeightClientController.KeyPadState.UPPER_CHARS);
         } catch (IOException e) { System.err.println(Lang.msg("exceptionRM208")); }
 
         if (!userInput.equals("Y")) {
@@ -100,7 +106,7 @@ public class Main {
 
         // Place tara
         try {
-            weightClient.rm208("Tare", "Place tare and press enter", IWeightClientController.KeyPadState.UPPER_CHARS);
+            userInput = weightClient.rm208("Tare", "placetare", IWeightClientController.KeyPadState.UPPER_CHARS);
         } catch (IOException e) { System.err.println(Lang.msg("exceptionRM208")); }
 
         System.out.println("Tare placed.");
@@ -108,14 +114,13 @@ public class Main {
         System.out.println("Weight successfully tared.");
 
         try {
-            weightClient.rm208("Tare", "Place powder and press enter", IWeightClientController.KeyPadState.UPPER_CHARS);
+            userInput = weightClient.rm208("Tare", "placepowder", IWeightClientController.KeyPadState.UPPER_CHARS);
         } catch (IOException e) { System.err.println(Lang.msg("exceptionRM208")); }
 
         gui.getCurrentWeight();
-        gui.tareWeight();
 
         try {
-            weightClient.rm208("Tare", "Remove gross and press enter", IWeightClientController.KeyPadState.UPPER_CHARS);
+            userInput = weightClient.rm208("Tare", "remove", IWeightClientController.KeyPadState.UPPER_CHARS);
         } catch (IOException e) { System.err.println(Lang.msg("exceptionRM208")); }
 
         gui.getCurrentWeight();
@@ -193,8 +198,6 @@ public class Main {
 
         return gui.connect(arguments[1], stoi(arguments[2]));
     }
-
-
 
     private void write() {
         String[] arguments = input.split(" ");

@@ -29,5 +29,6 @@ public interface IWeightClientController {
     String rm208(String primaryDisplay, String secondaryDisplay, KeyPadState keyPadState) throws IOException, StringIndexOutOfBoundsException;
 //    void changeButtonState() throws IOException;
     void setNewGrossWeight(double newWeight) throws IOException;
+    void cancelCurrentOperation() throws IOException;
     void close() throws IOException;
 }
