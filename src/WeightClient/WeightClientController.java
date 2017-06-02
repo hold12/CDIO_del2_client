@@ -4,15 +4,11 @@ package WeightClient;
  * Created by awo on 2017-03-16.
  */
 
-import TCP.TCPClient;
-import TCP.ITCPClient;
-
+import SimpleTCP.Client.*;
 import java.io.IOException;
 
 public class WeightClientController implements WeightClient.IWeightClientController {
     private ITCPClient tcp;
-    private String host;
-    private int port = 8000; // Default port
 
     public WeightClientController() {
         this.tcp = new TCPClient();
@@ -20,9 +16,6 @@ public class WeightClientController implements WeightClient.IWeightClientControl
 
     @Override
     public void connect(String host, int port) throws IOException {
-        this.host = host;
-        this.port = port;
-
         try {
             tcp.connect(host, port);
         } catch (IOException e) {
@@ -47,15 +40,21 @@ public class WeightClientController implements WeightClient.IWeightClientControl
 
     // T (Tare)
     @Override
-    public void tareWeight() throws IOException {
+    public String tareWeight() throws IOException {
+        String newTare;
         try {
             tcp.send("T");
-            if (!tcp.receive().startsWith("T S")) {
-                throw new IOException(("Failed to tare the weidht. Did not receive T A."));
+            newTare = tcp.receive();
+            if (!newTare.startsWith("T S")) {
+                throw new IOException(("Failed to tare the weight. Did not receive T S."));
             }
         } catch (IOException e) {
             throw new IOException("Failed to tare the weight: " + e.getMessage());
         }
+        newTare = newTare.replace("T S", "");
+        newTare = newTare.replace("\"", "");
+        newTare = newTare.trim();
+        return newTare;
     }
 
     @Override
@@ -119,7 +118,6 @@ public class WeightClientController implements WeightClient.IWeightClientControl
             if (!tcp.receive().equals("RM20 B"))
                 throw new IOException("Something went wrong when receiving RM20 B message from the weight.");
             userMessage = tcp.receive();
-            //userMessage = tcp.receive();
             userMessage = userMessage.replace("RM20 A \"", "");
             userMessage = userMessage.replace("\"", "");
         } catch (IOException e) {

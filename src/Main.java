@@ -11,12 +11,12 @@ import java.util.Scanner;
  * Created by awo on 16/03/17.
  */
 public class Main {
-    IWeightClientController weightClient;
-    IWeightGUI gui;
-    String input;
-    Scanner scn;
+    private IWeightClientController weightClient;
+    private IWeightGUI gui;
+    private String input;
+    private Scanner scn;
 
-    public Main() {
+    private Main() {
         weightClient = new WeightClientController();
         gui = new WeightGUI(weightClient);
         scn = new Scanner(System.in);
@@ -33,7 +33,7 @@ public class Main {
         main.startProgram();
     }
 
-    public void startProgram() {
+    private void startProgram() {
         while(true) {
             System.out.print("start> ");
             input = scn.nextLine().toLowerCase();
@@ -58,7 +58,7 @@ public class Main {
             console();
         if (input.startsWith("close") || input.startsWith("exit") || input.startsWith("quit")) {
             gui.close();
-            System.exit(0);
+            return;
         }
 
         menu();

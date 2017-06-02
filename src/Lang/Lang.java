@@ -9,8 +9,6 @@ import java.util.ResourceBundle;
 public class Lang {
     private static String lang;
     private static String country;
-    @SuppressWarnings("FieldCanBeLocal")
-    private static Locale locale;
 
     private static ResourceBundle resourceBundle;
 
@@ -20,16 +18,14 @@ public class Lang {
         if (args.length != 2) {
             lang = "en";
             country = "UK";
-        } else if (args.length == 2){
+        } else {
             lang = args[0];
             country = args[1];
-        } else {
-            System.out.println("Usage: java -jar game.jar <language> <country>");
         }
 
         try
         {
-            locale = new Locale(lang, country);
+            Locale locale = new Locale(lang, country);
             resourceBundle = ResourceBundle.getBundle("lang", locale);
         }
         catch (Exception ex)
