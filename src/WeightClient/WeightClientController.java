@@ -6,6 +6,7 @@ package WeightClient;
 
 import SimpleTCP.Client.*;
 import java.io.IOException;
+import java.nio.file.attribute.UserDefinedFileAttributeView;
 
 public class WeightClientController implements WeightClient.IWeightClientController {
     private ITCPClient tcp;
@@ -18,6 +19,8 @@ public class WeightClientController implements WeightClient.IWeightClientControl
     public void connect(String host, int port) throws IOException {
         try {
             tcp.connect(host, port);
+            String rec = tcp.receive(); // Receive initial "I4 A" after power-on
+            System.out.println(rec); //TODO: Remove debug (see above)
         } catch (IOException e) {
             throw new IOException("Failed to connect to " + host + " on port " + port + ": " + e.getMessage());
         }
@@ -61,7 +64,9 @@ public class WeightClientController implements WeightClient.IWeightClientControl
     public void cancelCurrentOperation() throws IOException {
         try {
             tcp.send("@");
-            if (!tcp.receive().startsWith("I4 A")) {
+            String tcpRecCan = tcp.receive(); // Receive initial "I4 A" after reset
+            System.out.println(tcpRecCan); //TODO: Remove debug
+            if (!tcpRecCan.startsWith("I4 A")) {
                 throw new IOException("Did not receive expected message after resetting.");
             }
         } catch (IOException e) {
@@ -115,9 +120,12 @@ public class WeightClientController implements WeightClient.IWeightClientControl
             String tmp = "RM20 8 \"" + secondaryDisplay + "\" \"\" \"" + keyPadState + "\"";
             System.out.println("Start :" + tmp + ": slut");
             tcp.send(tmp);
-            if (!tcp.receive().equals("RM20 B"))
+            String tcpRecRm = tcp.receive();
+            System.out.println(tcpRecRm);
+            if (!tcpRecRm.equals("RM20 B"))
                 throw new IOException("Something went wrong when receiving RM20 B message from the weight.");
             userMessage = tcp.receive();
+            System.out.println(userMessage);
             userMessage = userMessage.replace("RM20 A \"", "");
             userMessage = userMessage.replace("\"", "");
         } catch (IOException e) {

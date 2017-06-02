@@ -118,7 +118,6 @@ public class Main {
         } catch (IOException e) { System.err.println(Lang.msg("exceptionRM208")); }
 
         gui.getCurrentWeight();
-        gui.tareWeight();
 
         try {
             userInput = weightClient.rm208("Tare", "remove", IWeightClientController.KeyPadState.UPPER_CHARS);
@@ -199,8 +198,6 @@ public class Main {
 
         return gui.connect(arguments[1], stoi(arguments[2]));
     }
-
-
 
     private void write() {
         String[] arguments = input.split(" ");
